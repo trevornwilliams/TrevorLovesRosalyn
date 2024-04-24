@@ -28,7 +28,7 @@ function draw() {
   textFont(amaticFont);
   textSize(.1 * width);
   textAlign(CENTER);
-  text("T+R", width / 2, (height / 5) + 10);
+  text("T+R", width / 2, height / 5);
   text("06-24-2011", width / 2, height / 3);
   text("12-31-2014", width / 2, height / 2);
   text("09-09-2017", width / 2, height / 1.5);
