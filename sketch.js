@@ -26,7 +26,7 @@ function draw() {
   fill(128, 0, 0);
   stroke(10);
   textFont(amaticFont);
-  textSize(200);
+  textSize(.1 * width);
   textAlign(CENTER);
   text("T+R", width / 2, height / 5);
   text("06-24-2011", width / 2, height / 3);
