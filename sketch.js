@@ -3,9 +3,9 @@ var interval = 400;
 var last = -interval;
 var waves = [];
 
-var phosphateFont;
+var amaticFont;
 function preload() {
-	phosphateFont = loadFont('Phosphate-Inline.ttf');
+	amaticFont = loadFont('AmaticSC-Regular.ttf');
 }
 
 function setup() {
@@ -25,10 +25,15 @@ function draw() {
 
   fill(128, 0, 0);
   stroke(10);
-  textFont(phosphateFont);
+  textFont(amaticFont);
   textSize(200);
   textAlign(CENTER);
-  text("T+R", width / 2, height / 2);
+  text("T+R", width / 2, height / 5);
+  text("06-24-2011", width / 2, (height / 5) + 10);
+  text("12-31-2014", width / 2, (height / 5) + 20);
+  text("09-09-2017", width / 2, (height / 5) + 30);
+  text("And every new day together...", width / 5, (height / 5) + 50);
+
 
   if (millis() - last > interval) {
     corazones.push(new Heart(mouseX, mouseY));
