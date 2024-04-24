@@ -32,8 +32,7 @@ function draw() {
   text("06-24-2011", width / 2, height / 3);
   text("12-31-2014", width / 2, height / 2);
   text("09-09-2017", width / 2, height / 1.5);
-  text("And every new", width / 2, height / 1.2);
-  text("day together...", width / 2, height / 1.1);
+  text("And every new day together...", width / 2, height / 1.2);
 
 
   if (millis() - last > interval) {
