@@ -14,11 +14,11 @@ function setup() {
   for (let i = 0; i < 30; i++) {
     waves.push(new Wave());
   }
-  colorMode(HSB, 360, 100, 100, 100);
+  colorMode(RGB, 255);
 }
 
 function draw() {
-  background(355, 40, 100);
+  background(255, 240, 245); // Light pink background
 
   for (let wave of waves) {
     wave.display();
@@ -40,8 +40,8 @@ function draw() {
 }
 
 function drawResponsiveText() {
-  fill(0, 80, 50);
-  stroke(0, 80, 30);
+  fill(128, 0, 0); // Maroon color for text
+  stroke(10);
   strokeWeight(1);
   textFont(amaticFont);
   textAlign(CENTER, CENTER);
@@ -73,9 +73,11 @@ class Heart {
   constructor(posX, posY) {
     this.pos = createVector(posX, posY);
     this.vel = createVector(random(-2, 2), random(5, 10));
-    this.cH = random(340, 360);
-    this.cS = random(80, 100);
-    this.cB = random(80, 100);
+    this.color = color(
+      random(200, 255), // Red component
+      0,                // Green component
+      random(100, 200)  // Blue component
+    );
     this.size = min(width, height) * 0.03;
   }
 
@@ -85,7 +87,7 @@ class Heart {
     scale(this.size);
     beginShape();
     noStroke();
-    fill(this.cH, this.cS, this.cB);
+    fill(this.color);
     vertex(0, -0.5);
     bezierVertex(-0.5, -0.8, -1, -0.5, -1, 0);
     bezierVertex(-1, 0.6, 0, 1, 0, 1.5);
@@ -105,14 +107,19 @@ class Wave {
     this.yoffA = random(10);
     this.yoffB = this.yoffA;
     this.yRandom = random(-100, 100);
-    this.c = random(360);
+    this.color = color(
+      random(200, 255), // Red component
+      random(100, 150), // Green component
+      random(150, 200), // Blue component
+      50               // Alpha (transparency)
+    );
   }
 
   display() {
     let xoffA = 0;
     let xoffB = 0;
 
-    fill(this.c, 80, 100, 50);
+    fill(this.color);
     noStroke();
     beginShape();
 
