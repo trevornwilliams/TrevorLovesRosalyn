@@ -47,18 +47,28 @@ function drawResponsiveText() {
   fill(128, 0, 0);
   stroke(10);
   textFont(amaticFont);
-  textAlign(CENTER);
+  textAlign(CENTER, CENTER);
 
   let baseFontSize = 0.1 * width;
   let scaleFactor = min(1, width / 1000); // Adjust text size for smaller screens
 
-  textSize(baseFontSize * scaleFactor);
-  text("T+R", width / 2, height / 5);
-  text("06-25-2011", width / 2, height / 3);
-  text("12-31-2014", width / 2, height / 2);
-  text("09-09-2017", width / 2, height / 1.5);
-  text("And every new day together...", width / 2, height / 1.2);
+  // Draw "T+R" header
+  textSize(baseFontSize * 1.5 * scaleFactor);
+  text("T+R", width / 2, height * 0.15);
+
+  // Draw dates
+  textSize(baseFontSize * 0.7 * scaleFactor);
+  let dateY = height * 0.5;
+  let dateSpacing = baseFontSize * 0.8 * scaleFactor;
+  text("06-25-2011", width / 2, dateY - dateSpacing);
+  text("12-31-2014", width / 2, dateY);
+  text("09-09-2017", width / 2, dateY + dateSpacing);
+
+  // Draw footer text
+  textSize(baseFontSize * 0.6 * scaleFactor);
+  text("And every new day together...", width / 2, height * 0.85);
 }
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
