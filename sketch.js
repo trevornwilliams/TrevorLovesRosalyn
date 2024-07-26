@@ -109,12 +109,14 @@ class Wave {
     this.yoffA = random(10);
     this.yoffB = this.yoffA;
     this.yRandom = random(-height/4, height/4);
-    this.color = color(
-      random(200, 255), // Red component
-      random(100, 150), // Green component
-      random(150, 200), // Blue component
-      50               // Alpha (transparency)
-    );
+    this.color = this.generateWaveColor();
+  }
+
+  generateWaveColor() {
+    let r = random(180, 255);
+    let g = random(0, 50);
+    let b = random(100, 180);
+    return color(r, g, b, 50); // 50 is the alpha value for transparency
   }
 
   display() {
