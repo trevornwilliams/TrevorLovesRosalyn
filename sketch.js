@@ -46,23 +46,25 @@ function drawResponsiveText() {
   textFont(amaticFont);
   textAlign(CENTER, CENTER);
 
-  let baseFontSize = min(width, height) * 0.05;
-  let lineHeight = baseFontSize * 1.5;
-
-  textSize(baseFontSize * 1.2);
-  text("T+R", width / 2, height * 0.15);
-
-  textSize(baseFontSize * 0.8);
-  text("06-25-2011", width / 2, height * 0.15 + lineHeight);
-  text("12-31-2014", width / 2, height * 0.15 + lineHeight * 2);
-  text("09-09-2017", width / 2, height * 0.15 + lineHeight * 3);
-
-  textSize(baseFontSize * 0.6);
-  textWrap(WORD);
-  text("And every new day together...", width / 2, height * 0.15 + lineHeight * 4, width * 0.8);
+  let baseSize = min(width, height) * 0.1;
+  
+  textSize(baseSize);
+  text("T+R", width / 2, height * 0.2);
+  
+  textSize(baseSize * 0.6);
+  text("06-25-2011", width / 2, height * 0.33);
+  text("12-31-2014", width / 2, height * 0.5);
+  text("09-09-2017", width / 2, height * 0.67);
+  
+  textSize(baseSize * 0.5);
+  text("And every new day together...", width / 2, height * 0.84);
 }
 
-function touchMoved() {
+function mousePressed() {
+  corazones.push(new Heart(mouseX, mouseY));
+}
+
+function touchStarted() {
   corazones.push(new Heart(touchX, touchY));
   return false; // Prevent default
 }
@@ -80,7 +82,7 @@ class Heart {
       0,                // Green component
       random(100, 200)  // Blue component
     );
-    this.size = min(width, height) * 0.02;
+    this.size = min(width, height) * 0.03;
   }
 
   render() {
