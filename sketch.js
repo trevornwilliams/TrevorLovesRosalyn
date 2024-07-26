@@ -1,32 +1,33 @@
-var corazones = [];
-var interval = 400;
-var last = -interval;
-var waves = [];
+let corazones = [];
+let interval = 400;
+let last = -interval;
+let waves = [];
 
-var amaticFont;
+let amaticFont;
+
 function preload() {
-	amaticFont = loadFont('AmaticSC-Regular.ttf');
+  amaticFont = loadFont('AmaticSC-Regular.ttf');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  for (var i = 0; i < 30; i++) {
+  for (let i = 0; i < 30; i++) {
     waves.push(new Wave());
   }
+  colorMode(HSB, 360, 100, 100, 100);
 }
 
 function draw() {
-  background(255, 240, 245);
+  background(355, 40, 100);
 
-  for (var i = 0; i < waves.length; i++) {
-    waves[i].display();
+  for (let wave of waves) {
+    wave.display();
   }
 
-  fill(128, 0, 0);
-  stroke(10);
+  fill(0, 80, 50);
+  stroke(0, 80, 30);
   textFont(amaticFont);
-  textSize(.1 * width);
+  textSize(0.1 * width);
   textAlign(CENTER);
   text("T+R", width / 2, height / 5);
   text("06-25-2011", width / 2, height / 3);
@@ -34,117 +35,83 @@ function draw() {
   text("09-09-2017", width / 2, height / 1.5);
   text("And every new day together...", width / 2, height / 1.2);
 
-
   if (millis() - last > interval) {
     corazones.push(new Heart(mouseX, mouseY));
     last = millis();
   }
 
-  if (corazones.length - 1 > 0) {
-    for (i = 0; i < corazones.length; i++) {
-      if (corazones[i].pos.y > height) {
-        corazones.splice(i, 1);
-      }
-    }
-  }
+  corazones = corazones.filter(heart => heart.pos.y <= height);
 
-  for (i = 0; i < corazones.length; i++) {
-    corazones[i].render();
-    corazones[i].update();
+  for (let heart of corazones) {
+    heart.render();
+    heart.update();
   }
 }
 
-function touchMoved() {
+function mouseMoved() {
   corazones.push(new Heart(mouseX, mouseY));
 }
 
-function Heart(posX, posY) {
-  var r = 2;
-  this.pos = createVector(posX, posY);
-  this.vel = createVector(random(-2, 2), random(5, 10));
-  this.cR = random(200, 255);
-  this.cB = random(255);
+class Heart {
+  constructor(posX, posY) {
+    this.pos = createVector(posX, posY);
+    this.vel = createVector(random(-2, 2), random(5, 10));
+    this.cH = random(340, 360);
+    this.cS = random(80, 100);
+    this.cB = random(80, 100);
+  }
 
-  this.render = function () {
+  render() {
     push();
     translate(this.pos.x, this.pos.y);
+    scale(0.5);
     beginShape();
     noStroke();
-    fill(this.cR, 0, this.cB);
-    vertex(0.16755626400632834, -11.211884869082613);
-    vertex(1.2802802095405401, -14.424267353909979);
-    vertex(3.9999999999999987, -18.516660498395407);
-    vertex(8.498699402201431, -22.06005898599594);
-    vertex(14.385066634855471, -23.7924464852289);
-    vertex(20.784609690826525, -23);
-    vertex(26.552622898861795, -19.669773417461066);
-    vertex(30.5635893025685, -14.37968994096132);
-    vertex(32, -8.000000000000002);
-    vertex(30.5635893025685, -1.349984702280941);
-    vertex(26.552622898861802, 5.043477265749222);
-    vertex(20.78460969082653, 10.999999999999991);
-    vertex(14.385066634855471, 16.56071244874666);
-    vertex(8.49869940220144, 21.774252056190914);
-    vertex(3.9999999999999987, 26.516660498395407);
-    vertex(1.280280209540542, 30.43974892695726);
-    vertex(0.16755626400632817, 33.069915057276695);
-    vertex(5.877363255445677e-47, 34);
-    vertex(-0.16755626400632873, 33.069915057276695);
-    vertex(-1.2802802095405394, 30.439748926957257);
-    vertex(-4.000000000000003, 26.516660498395407);
-    vertex(-8.498699402201431, 21.77425205619092);
-    vertex(-14.385066634855464, 16.560712448746663);
-    vertex(-20.78460969082651, 11.000000000000014);
-    vertex(-26.552622898861788, 5.043477265749245);
-    vertex(-30.5635893025685, -1.3499847022809406);
-    vertex(-32, -7.999999999999993);
-    vertex(-30.56358930256851, -14.379689940961306);
-    vertex(-26.552622898861813, -19.669773417461048);
-    vertex(-20.784609690826525, -23);
-    vertex(-14.385066634855477, -23.7924464852289);
-    vertex(-8.498699402201446, -22.060058985995955);
-    vertex(-4.000000000000011, -18.516660498395417);
-    vertex(-1.280280209540539, -14.424267353909972);
-    vertex(-0.16755626400633106, -11.211884869082631);
-
+    fill(this.cH, this.cS, this.cB);
+    vertex(0, -12);
+    bezierVertex(-10, -20, -20, -10, -20, 0);
+    bezierVertex(-20, 15, 0, 25, 0, 35);
+    bezierVertex(0, 25, 20, 15, 20, 0);
+    bezierVertex(20, -10, 10, -20, 0, -12);
     endShape();
     pop();
-  };
+  }
 
-  this.update = function () {
+  update() {
     this.pos.add(this.vel);
-  };
+  }
 }
 
-function Wave() {
-  this.yoffA = random(10);
-  this.yoffB = this.yoffA;
-  this.yRandom = random(-100, 100);
-  this.c = random(360);
+class Wave {
+  constructor() {
+    this.yoffA = random(10);
+    this.yoffB = this.yoffA;
+    this.yRandom = random(-100, 100);
+    this.c = random(360);
+  }
 
-  this.display = function () {
-    this.xoffA = 0;
-    this.xoffB = 0;
+  display() {
+    let xoffA = 0;
+    let xoffB = 0;
 
     fill(this.c, 80, 100, 50);
+    noStroke();
     beginShape();
 
-    for (var xA = 0; xA <= width; xA += 10) {
-      var yA =
-        map(noise(this.xoffA, this.yoffA), 0, 1, 0, height) + this.yRandom;
+    for (let xA = 0; xA <= width; xA += 10) {
+      let yA = map(noise(xoffA, this.yoffA), 0, 1, 0, height) + this.yRandom;
       vertex(xA, yA);
-      this.xoffA += 0.05;
+      xoffA += 0.05;
     }
 
-    for (var xB = width; xB >= 0; xB -= 10) {
-      var yB =
-        map(noise(this.xoffB, this.yoffB), 0, 1, 0, height) + this.yRandom;
+    for (let xB = width; xB >= 0; xB -= 10) {
+      let yB = map(noise(xoffB, this.yoffB), 0, 1, 0, height) + this.yRandom;
       vertex(xB, yB);
-      this.xoffB += 0.05;
+      xoffB += 0.05;
     }
 
     this.yoffA += 0.01;
     this.yoffB += 0.01;
     endShape(CLOSE);
-  };
+  }
 }
