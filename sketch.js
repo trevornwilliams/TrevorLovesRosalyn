@@ -27,7 +27,7 @@ function draw() {
   drawResponsiveText();
 
   if (millis() - last > interval) {
-    corazones.push(new Heart(mouseX, mouseY));
+    corazones.push(new Heart(random(width), random(height)));
     last = millis();
   }
 
@@ -46,23 +46,25 @@ function drawResponsiveText() {
   textFont(amaticFont);
   textAlign(CENTER, CENTER);
 
-  let baseFontSize = min(width, height) * 0.06;
+  let baseFontSize = min(width, height) * 0.05;
   let lineHeight = baseFontSize * 1.5;
 
   textSize(baseFontSize * 1.2);
-  text("T+R", width / 2, height * 0.2);
-
-  textSize(baseFontSize);
-  text("06-25-2011", width / 2, height * 0.2 + lineHeight);
-  text("12-31-2014", width / 2, height * 0.2 + lineHeight * 2);
-  text("09-09-2017", width / 2, height * 0.2 + lineHeight * 3);
+  text("T+R", width / 2, height * 0.15);
 
   textSize(baseFontSize * 0.8);
-  text("And every new day together...", width / 2, height * 0.2 + lineHeight * 4);
+  text("06-25-2011", width / 2, height * 0.15 + lineHeight);
+  text("12-31-2014", width / 2, height * 0.15 + lineHeight * 2);
+  text("09-09-2017", width / 2, height * 0.15 + lineHeight * 3);
+
+  textSize(baseFontSize * 0.6);
+  textWrap(WORD);
+  text("And every new day together...", width / 2, height * 0.15 + lineHeight * 4, width * 0.8);
 }
 
-function mouseMoved() {
-  corazones.push(new Heart(mouseX, mouseY));
+function touchMoved() {
+  corazones.push(new Heart(touchX, touchY));
+  return false; // Prevent default
 }
 
 function windowResized() {
@@ -72,13 +74,13 @@ function windowResized() {
 class Heart {
   constructor(posX, posY) {
     this.pos = createVector(posX, posY);
-    this.vel = createVector(random(-2, 2), random(5, 10));
+    this.vel = createVector(random(-1, 1), random(2, 5));
     this.color = color(
       random(200, 255), // Red component
       0,                // Green component
       random(100, 200)  // Blue component
     );
-    this.size = min(width, height) * 0.03;
+    this.size = min(width, height) * 0.02;
   }
 
   render() {
@@ -106,7 +108,7 @@ class Wave {
   constructor() {
     this.yoffA = random(10);
     this.yoffB = this.yoffA;
-    this.yRandom = random(-100, 100);
+    this.yRandom = random(-height/4, height/4);
     this.color = color(
       random(200, 255), // Red component
       random(100, 150), // Green component
@@ -123,13 +125,13 @@ class Wave {
     noStroke();
     beginShape();
 
-    for (let xA = 0; xA <= width; xA += 10) {
+    for (let xA = 0; xA <= width; xA += width / 20) {
       let yA = map(noise(xoffA, this.yoffA), 0, 1, 0, height) + this.yRandom;
       vertex(xA, yA);
       xoffA += 0.05;
     }
 
-    for (let xB = width; xB >= 0; xB -= 10) {
+    for (let xB = width; xB >= 0; xB -= width / 20) {
       let yB = map(noise(xoffB, this.yoffB), 0, 1, 0, height) + this.yRandom;
       vertex(xB, yB);
       xoffB += 0.05;
