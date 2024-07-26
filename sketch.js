@@ -49,31 +49,40 @@ function drawResponsiveText() {
   textFont(amaticFont);
   textAlign(CENTER, CENTER);
 
-  let baseFontSize = 0.1 * width;
-  let scaleFactor = min(1, width / 1000); // Adjust text size for smaller screens
+  let baseFontSize = min(width, height) * 0.1;
+  let verticalScaleFactor = min(1, width / 1000); // Adjust text size for smaller screens
+  
+  // New horizontal scale factor that's more aggressive for mobile
+  let horizontalScaleFactor = map(width, 300, 1200, 1.5, 1, true);
+
+  // Calculate vertical positions relative to the center
+  let centerY = height / 2;
+  let spacing = baseFontSize * 0.8 * verticalScaleFactor;
 
   // Draw "T+R" header
-  textSize(baseFontSize * 1.5 * scaleFactor);
-  text("T+R", width / 2, height * 0.15);
+  textSize(baseFontSize * 1.5 * verticalScaleFactor * horizontalScaleFactor);
+  text("T+R", width / 2, centerY - spacing * 2);
 
   // Draw dates
-  textSize(baseFontSize * 0.7 * scaleFactor);
-  let dateY = height * 0.5;
-  let dateSpacing = baseFontSize * 0.8 * scaleFactor;
-  text("06-25-2011", width / 2, dateY - dateSpacing);
-  text("12-31-2014", width / 2, dateY);
-  text("09-09-2017", width / 2, dateY + dateSpacing);
+  textSize(baseFontSize * 0.7 * verticalScaleFactor * horizontalScaleFactor);
+  text("06-25-2011", width / 2, centerY - spacing);
+  text("12-31-2014", width / 2, centerY);
+  text("09-09-2017", width / 2, centerY + spacing);
 
   // Draw footer text
-  textSize(baseFontSize * 0.6 * scaleFactor);
-  text("And every new day together...", width / 2, height * 0.85);
+  textSize(baseFontSize * 0.6 * verticalScaleFactor * horizontalScaleFactor);
+  
+  // Wrap text for mobile screens
+  let footerText = "And every new day together...";
+  let maxWidth = width * 0.9;  // 90% of screen width
+  text(footerText, width / 2, centerY + spacing * 2, maxWidth);
 }
-
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+// Heart class remains the same
 class Heart {
   constructor(posX, posY) {
     this.pos = createVector(posX, posY);
@@ -111,6 +120,7 @@ class Heart {
   }
 }
 
+// Wave class remains the same
 class Wave {
   constructor() {
     this.yoffA = random(10);
