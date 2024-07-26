@@ -52,30 +52,29 @@ function drawResponsiveText() {
   let baseFontSize = min(width, height) * 0.1;
   let verticalScaleFactor = min(1, width / 1000); // Adjust text size for smaller screens
   
-  // New horizontal scale factor that's more aggressive for mobile
+  // Horizontal scale factor that's more aggressive for mobile
   let horizontalScaleFactor = map(width, 300, 1200, 1.5, 1, true);
 
-  // Calculate vertical positions relative to the center
+  // Calculate vertical positions
   let centerY = height / 2;
   let spacing = baseFontSize * 0.8 * verticalScaleFactor;
 
   // Draw "T+R" header
-  textSize(baseFontSize * 1.5 * verticalScaleFactor * horizontalScaleFactor);
-  text("T+R", width / 2, centerY - spacing * 2);
+  let headerSize = baseFontSize * 1.5 * verticalScaleFactor * horizontalScaleFactor;
+  textSize(headerSize);
+  let headerY = centerY - spacing * 2.5; // Moved slightly higher
+  text("T+R", width / 2, headerY);
 
   // Draw dates
-  textSize(baseFontSize * 0.7 * verticalScaleFactor * horizontalScaleFactor);
+  let dateSize = baseFontSize * 0.7 * verticalScaleFactor * horizontalScaleFactor;
+  textSize(dateSize);
   text("06-25-2011", width / 2, centerY - spacing);
   text("12-31-2014", width / 2, centerY);
   text("09-09-2017", width / 2, centerY + spacing);
 
   // Draw footer text
   textSize(baseFontSize * 0.6 * verticalScaleFactor * horizontalScaleFactor);
-  
-  // Wrap text for mobile screens
-  let footerText = "And every new day together...";
-  let maxWidth = width * 0.9;  // 90% of screen width
-  text(footerText, width / 2, centerY + spacing * 2, maxWidth);
+  text("And every new day together...", width / 2, centerY + spacing * 2.5);
 }
 
 function windowResized() {
