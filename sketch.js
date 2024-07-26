@@ -1,9 +1,8 @@
 let corazones = [];
-let interval = 400;
-let last = -interval;
 let waves = [];
-
 let amaticFont;
+let lastHeartTime = 0;
+let heartInterval = 50; // Adjust this to control how often hearts are created
 
 function preload() {
   amaticFont = loadFont('AmaticSC-Regular.ttf');
@@ -26,16 +25,21 @@ function draw() {
 
   drawResponsiveText();
 
-  if (millis() - last > interval) {
+  // Create hearts following the cursor
+  if (millis() - lastHeartTime > heartInterval) {
     corazones.push(new Heart(mouseX, mouseY));
-    last = millis();
+    lastHeartTime = millis();
   }
 
-  corazones = corazones.filter(heart => heart.pos.y <= height);
-
-  for (let heart of corazones) {
-    heart.render();
-    heart.update();
+  // Update and render hearts
+  for (let i = corazones.length - 1; i >= 0; i--) {
+    corazones[i].update();
+    corazones[i].render();
+    
+    // Remove hearts that are off-screen
+    if (corazones[i].isOffScreen()) {
+      corazones.splice(i, 1);
+    }
   }
 }
 
@@ -56,15 +60,6 @@ function drawResponsiveText() {
   text("And every new day together...", width / 2, height / 1.2);
 }
 
-function mousePressed() {
-  corazones.push(new Heart(mouseX, mouseY));
-}
-
-function touchStarted() {
-  corazones.push(new Heart(touchX, touchY));
-  return false; // Prevent default
-}
-
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -72,10 +67,13 @@ function windowResized() {
 class Heart {
   constructor(posX, posY) {
     this.pos = createVector(posX, posY);
-    this.vel = createVector(random(-2, 2), random(5, 10));
+    this.vel = createVector(random(-1, 1), random(2, 4));
+    this.acc = createVector(0, 0.05);
     this.cR = random(200, 255);
     this.cB = random(255);
-    this.size = 2;
+    this.size = random(1, 3);
+    this.opacity = 255;
+    this.fadeSpeed = random(2, 4);
   }
 
   render() {
@@ -84,17 +82,22 @@ class Heart {
     scale(this.size);
     beginShape();
     noStroke();
-    fill(this.cR, 0, this.cB);
-    // Heart shape vertices (same as original)
-    vertex(0.16755626400632834, -11.211884869082613);
-    // ... (include all original vertices here)
-    vertex(-0.16755626400633106, -11.211884869082631);
+    fill(this.cR, 0, this.cB, this.opacity);
+    vertex(0, -10);
+    bezierVertex(-10, -20, -20, 0, 0, 10);
+    bezierVertex(20, 0, 10, -20, 0, -10);
     endShape();
     pop();
   }
 
   update() {
+    this.vel.add(this.acc);
     this.pos.add(this.vel);
+    this.opacity -= this.fadeSpeed;
+  }
+
+  isOffScreen() {
+    return this.pos.y > height || this.opacity <= 0;
   }
 }
 
@@ -103,14 +106,14 @@ class Wave {
     this.yoffA = random(10);
     this.yoffB = this.yoffA;
     this.yRandom = random(-100, 100);
-    this.c = random(360);
+    this.c = color(random(200, 255), random(100, 150), random(150, 200), 50);
   }
 
   display() {
     let xoffA = 0;
     let xoffB = 0;
 
-    fill(this.c, 80, 100, 50);
+    fill(this.c);
     beginShape();
 
     for (let xA = 0; xA <= width; xA += 10) {
