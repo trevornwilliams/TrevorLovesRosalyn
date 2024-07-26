@@ -24,16 +24,7 @@ function draw() {
     wave.display();
   }
 
-  fill(0, 80, 50);
-  stroke(0, 80, 30);
-  textFont(amaticFont);
-  textSize(0.1 * width);
-  textAlign(CENTER);
-  text("T+R", width / 2, height / 5);
-  text("06-25-2011", width / 2, height / 3);
-  text("12-31-2014", width / 2, height / 2);
-  text("09-09-2017", width / 2, height / 1.5);
-  text("And every new day together...", width / 2, height / 1.2);
+  drawResponsiveText();
 
   if (millis() - last > interval) {
     corazones.push(new Heart(mouseX, mouseY));
@@ -48,8 +39,34 @@ function draw() {
   }
 }
 
+function drawResponsiveText() {
+  fill(0, 80, 50);
+  stroke(0, 80, 30);
+  strokeWeight(1);
+  textFont(amaticFont);
+  textAlign(CENTER, CENTER);
+
+  let baseFontSize = min(width, height) * 0.06;
+  let lineHeight = baseFontSize * 1.5;
+
+  textSize(baseFontSize * 1.2);
+  text("T+R", width / 2, height * 0.2);
+
+  textSize(baseFontSize);
+  text("06-25-2011", width / 2, height * 0.2 + lineHeight);
+  text("12-31-2014", width / 2, height * 0.2 + lineHeight * 2);
+  text("09-09-2017", width / 2, height * 0.2 + lineHeight * 3);
+
+  textSize(baseFontSize * 0.8);
+  text("And every new day together...", width / 2, height * 0.2 + lineHeight * 4);
+}
+
 function mouseMoved() {
   corazones.push(new Heart(mouseX, mouseY));
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 class Heart {
@@ -59,20 +76,21 @@ class Heart {
     this.cH = random(340, 360);
     this.cS = random(80, 100);
     this.cB = random(80, 100);
+    this.size = min(width, height) * 0.03;
   }
 
   render() {
     push();
     translate(this.pos.x, this.pos.y);
-    scale(0.5);
+    scale(this.size);
     beginShape();
     noStroke();
     fill(this.cH, this.cS, this.cB);
-    vertex(0, -12);
-    bezierVertex(-10, -20, -20, -10, -20, 0);
-    bezierVertex(-20, 15, 0, 25, 0, 35);
-    bezierVertex(0, 25, 20, 15, 20, 0);
-    bezierVertex(20, -10, 10, -20, 0, -12);
+    vertex(0, -0.5);
+    bezierVertex(-0.5, -0.8, -1, -0.5, -1, 0);
+    bezierVertex(-1, 0.6, 0, 1, 0, 1.5);
+    bezierVertex(0, 1, 1, 0.6, 1, 0);
+    bezierVertex(1, -0.5, 0.5, -0.8, 0, -0.5);
     endShape();
     pop();
   }
